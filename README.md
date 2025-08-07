@@ -1,31 +1,80 @@
-# My Python Project
+# Automation Scripts Collection
 
-## Overview
-This project is a Python application that serves as an entry point for demonstrating functionality. It includes a main module and corresponding unit tests to ensure reliability.
+A collection of Python automation scripts organized by domain for data processing, GitHub analytics, reporting, and dependency analysis.
 
-## Installation
-To install the required dependencies, run the following command:
+## Project Structure
 
 ```
-pip install -r requirements.txt
+src/
+├── data-processing/     # Data transformation and synchronization
+│   ├── json_to_excel.py      # Convert JSON to Excel format
+│   └── customer_sync.py       # Customer data synchronization
+├── github-analytics/    # GitHub repository analysis
+│   └── projects_by_query.py   # Query and analyze GitHub projects
+├── reporting/          # Report generation
+│   └── fetch_weekly_report.py # Generate weekly reports
+├── dependency-analysis/ # Project dependency tools
+│   ├── analyze_dependencies.py # Analyze project dependencies
+│   ├── build_dependency_tree.py # Build dependency trees
+│   └── parse_tree.py          # Parse dependency structures
+└── util/               # Shared utilities
+    ├── data_processor.py      # Data processing utilities
+    ├── file_utils.py          # File operations
+    └── github_utils.py        # GitHub API utilities
+```
+
+## Installation
+
+### Development Installation
+```bash
+pip install -e .
+```
+
+### Production Installation
+```bash
+pip install .
+```
+
+### With Development Dependencies
+```bash
+pip install -e ".[dev]"
 ```
 
 ## Usage
-To run the application, execute the following command:
 
+### Data Processing
+```bash
+python -m src.data-processing.json_to_excel
+python -m src.data-processing.customer_sync
 ```
-python src/main.py
+
+### GitHub Analytics
+```bash
+python -m src.github-analytics.projects_by_query
+```
+
+### Reporting
+```bash
+python -m src.reporting.fetch_weekly_report
+```
+
+### Dependency Analysis
+```bash
+python -m src.dependency-analysis.analyze_dependencies
+python -m src.dependency-analysis.build_dependency_tree
+```
+
+## Configuration
+
+Copy `.env.example` to `.env` and configure your API tokens:
+
+```bash
+JIRA_API_TOKEN=your_token_here
+GITHUB_TOKEN=your_token_here
 ```
 
 ## Running Tests
-To run the unit tests, use the following command:
 
-```
+```bash
 python -m unittest discover -s tests
 ```
-
-## Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
