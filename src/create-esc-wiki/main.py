@@ -4,15 +4,10 @@ import argparse
 import logging
 import sys
 from dotenv import load_dotenv
+from ..util.logging_config import setup_logging
 from .sync import CreateEscWiki
 
 load_dotenv()
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
 
 def main():
     parser = argparse.ArgumentParser(description="Sync Jira issues from filter to Confluence pages")

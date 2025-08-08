@@ -1,6 +1,5 @@
 import os
 import requests
-import logging
 from typing import Dict, List, Optional
 from dotenv import load_dotenv
 
@@ -52,3 +51,10 @@ class JiraRestApi:
         """Count issues matching JQL query"""
         data = self.search_issues(jql)
         return data.get("total", 0)
+    
+    def get_issues_from_filter(self, filter_id: str) -> List[Dict]:
+        """Get all issues from a Jira filter"""
+        filter_data = self.get_filter(filter_id)
+        jql = filter_data.get("jql", "")
+        search_result = self.search_issues(jql)
+        return search_result.get("issues", [])

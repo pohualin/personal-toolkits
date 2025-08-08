@@ -13,13 +13,7 @@ class CreateEscWiki:
         self.parent_id = "1892909160"
         self.space_key = "38371328"  # Changed from space_id to space_key
 
-    def get_issues_from_filter(self, filter_id: str) -> List[Dict]:
-        """Get all issues from a Jira filter"""
-        filter_data = self.jira.get_filter(filter_id)
-        jql = filter_data.get("jql", "")
-        search_result = self.jira.search_issues(jql)
-        logging.info(f"Found {len(search_result.get('issues', []))} issues from filter {filter_id} ({filter_data.get('name')})")
-        return search_result.get("issues", [])
+
 
     def page_exists_for_issue(self, issue_key: str) -> bool:
         """Check if a Confluence page exists for the given issue key"""
@@ -67,7 +61,8 @@ class CreateEscWiki:
         """Main sync method: get issues from filter and create pages if needed"""
         logging.info(f"Starting sync for filter {filter_id}")
 
-        issues = self.get_issues_from_filter(filter_id)
+        issues = self.jira.get_issues_from_filter(filter_id)
+        logging.info(f"Found {len(issues)} issues from filter {filter_id}")
         results = {
             "total_issues": len(issues),
             "pages_created": 0,
