@@ -12,7 +12,9 @@ src/
 ├── github-analytics/    # GitHub repository analysis
 │   └── projects_by_query.py   # Query and analyze GitHub projects
 ├── reporting/          # Report generation
-│   └── fetch_weekly_report.py # Generate weekly reports
+│   ├── main.py               # Combined reporting runner
+│   ├── fetch_esc_kpi.py      # ESC KPI metrics and analysis
+│   └── fetch_weekly_report.py # Weekly objectives report
 ├── dependency-analysis/ # Project dependency tools
 │   ├── analyze_dependencies.py # Analyze project dependencies
 │   ├── build_dependency_tree.py # Build dependency trees
@@ -25,7 +27,9 @@ src/
     ├── file_utils.py          # File operations
     ├── github_utils.py        # GitHub API utilities
     ├── jira_rest_api.py       # Jira REST API client
-    └── wiki_rest_api.py       # Confluence REST API client
+    ├── wiki_rest_api.py       # Confluence REST API client
+    ├── logging_config.py      # Global logging configuration
+    └── output_capture.py      # Output capture utilities
 ```
 
 ## Installation
@@ -72,8 +76,17 @@ python -m src.github-analytics.projects_by_query -s
 
 ### Reporting
 ```bash
+# Run combined ESC KPI and weekly report
+python -m src.reporting.main
+
+# Run individual reports
+python -m src.reporting.fetch_esc_kpi
 python -m src.reporting.fetch_weekly_report
 ```
+
+**Output:**
+- Text report: `weekly_report/YYYYmmdd_weekly_report.txt`
+- JSON data: `weekly_report/YYYYmmdd_weekly_report.json`
 
 ### Dependency Analysis
 ```bash
@@ -107,10 +120,11 @@ Create a `.env` file in the project root with the following variables:
 | Variable | Description | Required For |
 |----------|-------------|-------------|
 | `GITHUB_TOKEN` | GitHub personal access token | GitHub analytics, security scanning |
-| `JIRA_API_TOKEN` | JIRA API token (Base64 encoded) | JIRA integration, ESC wiki creation |
-| `JIRA_BASE_URL` | JIRA instance URL | JIRA integration, ESC wiki creation |
+| `JIRA_API_TOKEN` | JIRA API token (Base64 encoded) | JIRA integration, ESC wiki creation, reporting |
+| `JIRA_BASE_URL` | JIRA instance URL | JIRA integration, ESC wiki creation, reporting |
 | `CONFLUENCE_API_TOKEN` | Confluence API token (Base64 encoded) | ESC wiki creation |
 | `CONFLUENCE_BASE_URL` | Confluence instance URL | ESC wiki creation |
+| `LOG_LEVEL` | Logging level (DEBUG, INFO, WARNING, ERROR) | Global logging control |
 
 ### Example `.env` file:
 
