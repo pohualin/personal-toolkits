@@ -1,4 +1,4 @@
-Weekly Report Generated: 2025-08-08 15:21:43
+Weekly Report Generated: 2025-08-08 15:42:19
 
 === ESC KPI Summary ===
 Filter ID  Filter Name                                        Total Issues   
@@ -40,6 +40,9 @@ Assignee vs Status Matrix:
   Sachin Raj:
     Pending Fix    :   1 (100.0% of Sachin Raj's work)
 
+================================================================================
+
+
 === High Level Objectives ===
 DORS-4075,Code Security Remediation - Java, Spring and tw parent pom,7,6
 DORS-4161,New DNA role with limited visibility for SPG,5,4
@@ -67,3 +70,7 @@ DORS-3858,Address pentest finding - Excessive Session Timeout - PDF Upload,1,0
 DORS-3865,Product Catalog enhancement,1,0
 DORS-3892,Pentest Finding - Vulnerabilities ,3,1
 DORS-3645,New Findings Report - Data Source Threat Finding Count,2,0
+
+Reports saved to:
+  Text: weekly_report/20250811_weekly_report.txt
+  JSON: weekly_report/20250811_weekly_report.json

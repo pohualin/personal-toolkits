@@ -1,55 +1,66 @@
-import csv
 import logging
 from ..util.logging_config import setup_logging
 from ..util.jira_rest_api import JiraRestApi
 
 jira = JiraRestApi()
 
-def csv_export(epic):
-    logging.debug(f"Requesting issues for epic {epic}")
-    data = jira.search_issues(f"parent={epic}")
-    with open(f"{epic}.csv", "w", newline="") as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(["Key", "StatusCategory"])
-        for issue in data.get("issues", []):
-            writer.writerow([issue["key"], issue["fields"]["status"]["statusCategory"]["name"]])
-    logging.debug(f"Exported issues for epic {epic} to {epic}.csv")
-
-def calculate(key):
-    key = key.replace('"', '')
-    issue_data = jira.get_issue(key)
-    epic = issue_data.get("key")
-    summary = ""
+def analyze_epic(epic_key):
+    """Analyze a single epic and return structured data"""
     try:
+        epic_key = epic_key.replace('"', '')
+        issue_data = jira.get_issue(epic_key)
+        epic = issue_data.get("key")
         summary = issue_data.get("fields", {}).get("summary", "")
-    except (IndexError, KeyError, TypeError):
-        logging.warning(f"Could not retrieve summary for epic {epic}")
+        
+        total = jira.count_issues(f"parent={epic}")
+        done = jira.count_issues(f"parent={epic} AND statusCategory = Done")
+        completion_rate = (done / total * 100) if total > 0 else 0
+        
+        return {
+            "epic_key": epic,
+            "summary": summary,
+            "total_issues": total,
+            "done_issues": done,
+            "completion_rate": round(completion_rate, 1)
+        }
+    except Exception as e:
+        logging.error(f"Error analyzing epic {epic_key}: {e}")
+        return {
+            "epic_key": epic_key,
+            "summary": "ERROR",
+            "total_issues": 0,
+            "done_issues": 0,
+            "completion_rate": 0,
+            "error": str(e)
+        }
 
-    total = jira.count_issues(f"parent={epic}")
-    done = jira.count_issues(f"parent={epic} AND statusCategory = Done")
-
-    print(f"{epic},{summary},{total},{done}")
-
-def get_keys():
-    logging.debug("Fetching filter 18871")
-    filter_data = jira.get_filter("18871")
-    search_url = filter_data.get("searchUrl", "")
-    if search_url.startswith('"') and search_url.endswith('"'):
-        search_url = search_url[1:-1]
-    logging.debug(f"Fetching issues from search URL: {search_url}")
+def fetch_weekly_report():
+    """Fetch weekly report data from filter 18871"""
+    logging.info("Fetching filter 18871 for weekly report")
     
-    # Extract JQL from search URL or use filter's JQL
-    jql = filter_data.get("jql", "")
-    data = jira.search_issues(jql)
-    keys = [issue["id"] for issue in data.get("issues", [])]
-    logging.debug(f"Retrieved {len(keys)} keys")
-    return keys
+    try:
+        # Get epics from filter
+        issues = jira.get_issues_from_filter("18871")
+        epic_keys = [issue["id"] for issue in issues]
+        
+        print(f"\n=== High Level Objectives ===")
+        
+        results = []
+        for key in epic_keys:
+            epic_data = analyze_epic(key)
+            results.append(epic_data)
+            
+            # Print formatted row
+            print(f"{epic_data['epic_key']},{epic_data['summary']},{epic_data['total_issues']},{epic_data['done_issues']}")        
+        return results
+        
+    except Exception as e:
+        logging.error(f"Error fetching weekly report: {e}")
+        return []
 
 def main():
-    keys = get_keys()
-    print(f"\n=== High Level Objectives ===")
-    for key in keys:
-        calculate(key)
+    """Main function for weekly report"""
+    return fetch_weekly_report()
 
 if __name__ == "__main__":
     main()

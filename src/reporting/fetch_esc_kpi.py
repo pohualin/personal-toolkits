@@ -7,6 +7,7 @@ jira = JiraRestApi()
 def fetch_esc_kpi():
     """Fetch ESC KPI summary from specified filters"""
     filter_ids = ["18891", "19040", "19041"]
+    results = []
     
     print(f"\n=== ESC KPI Summary ===")
     print(f"{'Filter ID':<10} {'Filter Name':<50} {'Total Issues':<15}")
@@ -25,11 +26,25 @@ def fetch_esc_kpi():
             # Print summary row
             print(f"{filter_id:<10} {filter_name[:48]:<50} {issue_count:<15}")
             
+            # Add to results
+            results.append({
+                "filter_id": filter_id,
+                "filter_name": filter_name,
+                "total_issues": issue_count
+            })
+            
         except Exception as e:
             logging.error(f"Error fetching filter {filter_id}: {e}")
             print(f"{filter_id:<10} {'ERROR':<50} {'N/A':<15}")
+            results.append({
+                "filter_id": filter_id,
+                "filter_name": "ERROR",
+                "total_issues": None,
+                "error": str(e)
+            })
     
     print("-" * 75)
+    return results
 
 def analyze_filter_18891():
     """Analyze all issues in filter 18891 with detailed breakdown"""
