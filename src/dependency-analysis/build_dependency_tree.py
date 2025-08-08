@@ -2,10 +2,16 @@ import os
 import sys
 import subprocess
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
-    # Go to ~/Workspace/all
-    abs_folder = os.path.expanduser("~/Workspace/all")
+    # Get repos directory from environment
+    repos_dir = os.getenv('REPOS_DIR')
+    if not repos_dir:
+        raise ValueError("REPOS_DIR environment variable is required")
+    abs_folder = os.path.expanduser(repos_dir)
     if not os.path.isdir(abs_folder):
         print(f"Folder {abs_folder} does not exist.")
         sys.exit(1)
@@ -54,7 +60,10 @@ def process_folder(abs_folder):
                 process_folder(os.path.join(abs_folder, subdir))
                 found = True
         if found:
-            error_dir = os.path.expanduser("~/Workspace/analysis/error")
+            analysis_dir = os.getenv('ANALYSIS_DIR')
+            if not analysis_dir:
+                raise ValueError("ANALYSIS_DIR environment variable is required")
+            error_dir = os.path.join(os.path.expanduser(analysis_dir), "error")
             os.makedirs(error_dir, exist_ok=True)
             error_file_path = os.path.join(error_dir, f"{os.path.basename(abs_folder)}.error")
             with open(error_file_path, "w") as f:
@@ -66,7 +75,10 @@ def process_folder(abs_folder):
 
     # Run mvn dependency:tree with outputType=json
     output_file_name = f"{os.path.basename(abs_folder)}.tmp"
-    output_json_dir = os.path.expanduser("~/Workspace/analysis/json")
+    analysis_dir = os.getenv('ANALYSIS_DIR')
+    if not analysis_dir:
+        raise ValueError("ANALYSIS_DIR environment variable is required")
+    output_json_dir = os.path.join(os.path.expanduser(analysis_dir), "json")
     output_file_path = os.path.join(output_json_dir, output_file_name)
     print(f"Running 'mvn dependency:tree -DoutputType=json -DoutputFile={output_file_path}' in {abs_folder} ...")
     result = subprocess.run(
@@ -91,7 +103,10 @@ def process_folder(abs_folder):
     
     if result.returncode != 0:
         print(f"Maven command failed: {abs_folder}")
-        error_dir = os.path.expanduser("~/Workspace/analysis/error")
+        analysis_dir = os.getenv('ANALYSIS_DIR')
+        if not analysis_dir:
+            raise ValueError("ANALYSIS_DIR environment variable is required")
+        error_dir = os.path.join(os.path.expanduser(analysis_dir), "error")
         os.makedirs(error_dir, exist_ok=True)
         error_file_path = os.path.join(error_dir, f"{os.path.basename(abs_folder)}.error")
         with open(error_file_path, "w") as f:

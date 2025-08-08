@@ -27,8 +27,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'json-to-excel=data_processing.json_to_excel:main',
-            'customer-sync=data_processing.customer_sync:main',
+            'json-to-excel=customer_cleanup.json_to_excel:main',
+            'customer-sync=customer_cleanup.customer_sync:main',
             'github-projects=github_analytics.projects_by_query:main',
             'weekly-report=reporting.fetch_weekly_report:main'
         ]

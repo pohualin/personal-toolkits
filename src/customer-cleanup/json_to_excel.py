@@ -1,15 +1,22 @@
 """Convert JSON customer data to Excel format."""
 
 import os
+from dotenv import load_dotenv
 from util.data_processor import JSONProcessor, ExcelExporter
 from util.file_utils import ensure_file_exists, generate_timestamped_filename
+
+load_dotenv()
 
 
 def parse_json_to_excel(input_file: str = None, output_dir: str = None) -> None:
     """Parse JSON customer data and export to Excel."""
-    # Default paths
-    input_file = input_file or os.path.expanduser("~/Workspace/customer_sync/true_active.json")
-    output_dir = output_dir or "~/Workspace/customer_sync"
+    # Get required environment variable
+    sync_dir = os.getenv('CUSTOMER_SYNC_DIR')
+    if not sync_dir:
+        raise ValueError("CUSTOMER_SYNC_DIR environment variable is required")
+    sync_dir = os.path.expanduser(sync_dir)
+    input_file = input_file or os.path.join(sync_dir, "true_active.json")
+    output_dir = output_dir or sync_dir
     
     # Validate input file
     if not ensure_file_exists(input_file):

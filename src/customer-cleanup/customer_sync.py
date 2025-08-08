@@ -2,10 +2,16 @@ import pandas as pd
 import os
 import sys
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def load_excel_file():
-    """Load and display Excel file from ~/Workspace/customer_sync directory."""
-    target_dir = os.path.expanduser("~/Workspace/customer_sync")
+    """Load and display Excel file from customer sync directory."""
+    sync_dir = os.getenv('CUSTOMER_SYNC_DIR')
+    if not sync_dir:
+        raise ValueError("CUSTOMER_SYNC_DIR environment variable is required")
+    target_dir = os.path.expanduser(sync_dir)
     
     if not os.path.isdir(target_dir):
         print(f"Directory {target_dir} does not exist.")

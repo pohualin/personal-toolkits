@@ -6,7 +6,7 @@ A collection of Python automation scripts organized by domain for data processin
 
 ```
 src/
-├── data-processing/     # Data transformation and synchronization
+├── customer-cleanup/    # Customer data transformation and cleanup
 │   ├── json_to_excel.py      # Convert JSON to Excel format
 │   └── customer_sync.py       # Customer data synchronization
 ├── github-analytics/    # GitHub repository analysis
@@ -42,16 +42,28 @@ pip install -e ".[dev]"
 
 ## Usage
 
-### Data Processing
+### Customer Cleanup
 ```bash
-python -m src.data-processing.json_to_excel
-python -m src.data-processing.customer_sync
+python -m src.customer-cleanup.json_to_excel
+python -m src.customer-cleanup.customer_sync
 ```
 
 ### GitHub Analytics
 ```bash
+# Basic usage
 python -m src.github-analytics.projects_by_query
+
+# With custom query
+python -m src.github-analytics.projects_by_query -q "language:Python stars:>100"
+
+# Pull security alerts
+python -m src.github-analytics.projects_by_query -s
 ```
+
+**Arguments:**
+- `-q, --query`: GitHub search query string
+- `-d, --download`: Download (clone) the repositories
+- `-s, --security`: Include Dependabot security alerts (requires GITHUB_TOKEN)
 
 ### Reporting
 ```bash
@@ -66,11 +78,34 @@ python -m src.dependency-analysis.build_dependency_tree
 
 ## Configuration
 
-Copy `.env.example` to `.env` and configure your API tokens:
+Create a `.env` file in the project root with the following variables:
+
+### Required Environment Variables
+
+| Variable | Description | Example |
+|----------|-------------|----------|
+| `CUSTOMER_SYNC_DIR` | Directory for customer data files | `~/Workspace/customer_sync` |
+| `ANALYSIS_DIR` | Directory for analysis outputs | `~/Workspace/analysis` |
+| `REPOS_DIR` | Directory for cloned repositories | `~/Workspace/all` |
+
+### Optional Environment Variables
+
+| Variable | Description | Required For |
+|----------|-------------|-------------|
+| `GITHUB_TOKEN` | GitHub personal access token | GitHub analytics, security scanning |
+| `JIRA_API_TOKEN` | JIRA API token | JIRA integration scripts |
+
+### Example `.env` file:
 
 ```bash
-JIRA_API_TOKEN=your_token_here
-GITHUB_TOKEN=your_token_here
+# Required directories
+CUSTOMER_SYNC_DIR=~/Workspace/customer_sync
+ANALYSIS_DIR=~/Workspace/analysis
+REPOS_DIR=~/Workspace/all
+
+# Optional API tokens
+GITHUB_TOKEN=ghp_your_token_here
+JIRA_API_TOKEN=your_jira_token_here
 ```
 
 ## Running Tests

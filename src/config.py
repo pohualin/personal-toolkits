@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Project paths
 PROJECT_ROOT = Path(__file__).parent.parent
-DATA_DIR = os.path.expanduser("~/Workspace/customer_sync")
+DATA_DIR = os.path.expanduser(os.getenv('CUSTOMER_SYNC_DIR', '~/Workspace/customer_sync'))
 
 # File paths
 DEFAULT_INPUT_FILE = os.path.join(DATA_DIR, "true_active.json")

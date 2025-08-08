@@ -8,6 +8,9 @@ from datetime import datetime
 import re
 import argparse
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -108,7 +111,10 @@ def main(query_string, download, include_security):
         data.append(repo_data)
 
     df = pd.DataFrame(data)
-    base_dir = os.path.expanduser('~/Workspace/analysis')
+    analysis_dir = os.getenv('ANALYSIS_DIR')
+    if not analysis_dir:
+        raise ValueError("ANALYSIS_DIR environment variable is required")
+    base_dir = os.path.expanduser(analysis_dir)
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     # Replace only characters not valid in Mac file names: /, :, and optionally control chars
     safe_query = re.sub(r'[:/\s]', '_', query_string)
@@ -117,7 +123,10 @@ def main(query_string, download, include_security):
     logging.info(f"Saved project names and topics to {output_file}")
 
     if download:
-        base_dir = os.path.expanduser('~/Workspace/all')
+        repos_dir = os.getenv('REPOS_DIR')
+        if not repos_dir:
+            raise ValueError("REPOS_DIR environment variable is required")
+        base_dir = os.path.expanduser(repos_dir)
         for repo in projects:
             repo_name = repo.get('name', '')
             repo_url = repo.get('ssh_url', '')
