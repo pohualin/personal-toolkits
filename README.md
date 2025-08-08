@@ -1,6 +1,6 @@
 # Automation Scripts Collection
 
-A collection of Python automation scripts organized by domain for data processing, GitHub analytics, reporting, and dependency analysis.
+A collection of Python automation scripts organized by domain for data processing, GitHub analytics, reporting, dependency analysis, and Jira-Confluence integration.
 
 ## Project Structure
 
@@ -17,10 +17,15 @@ src/
 │   ├── analyze_dependencies.py # Analyze project dependencies
 │   ├── build_dependency_tree.py # Build dependency trees
 │   └── parse_tree.py          # Parse dependency structures
+├── create-esc-wiki/    # ESC wiki page creation from Jira
+│   ├── sync.py               # Main sync logic
+│   └── main.py               # CLI entry point
 └── util/               # Shared utilities
     ├── data_processor.py      # Data processing utilities
     ├── file_utils.py          # File operations
-    └── github_utils.py        # GitHub API utilities
+    ├── github_utils.py        # GitHub API utilities
+    ├── jira_rest_api.py       # Jira REST API client
+    └── wiki_rest_api.py       # Confluence REST API client
 ```
 
 ## Installation
@@ -76,6 +81,15 @@ python -m src.dependency-analysis.analyze_dependencies
 python -m src.dependency-analysis.build_dependency_tree
 ```
 
+### ESC Wiki Creation
+```bash
+# Create wiki pages from Jira filter
+python -m src.create-esc-wiki.main -f 18871
+```
+
+**Arguments:**
+- `-f, --filter-id`: Jira filter ID to sync issues from
+
 ## Configuration
 
 Create a `.env` file in the project root with the following variables:
@@ -93,7 +107,10 @@ Create a `.env` file in the project root with the following variables:
 | Variable | Description | Required For |
 |----------|-------------|-------------|
 | `GITHUB_TOKEN` | GitHub personal access token | GitHub analytics, security scanning |
-| `JIRA_API_TOKEN` | JIRA API token | JIRA integration scripts |
+| `JIRA_API_TOKEN` | JIRA API token (Base64 encoded) | JIRA integration, ESC wiki creation |
+| `JIRA_BASE_URL` | JIRA instance URL | JIRA integration, ESC wiki creation |
+| `CONFLUENCE_API_TOKEN` | Confluence API token (Base64 encoded) | ESC wiki creation |
+| `CONFLUENCE_BASE_URL` | Confluence instance URL | ESC wiki creation |
 
 ### Example `.env` file:
 
@@ -105,7 +122,12 @@ REPOS_DIR=~/Workspace/all
 
 # Optional API tokens
 GITHUB_TOKEN=ghp_your_token_here
-JIRA_API_TOKEN=your_jira_token_here
+
+# Jira/Confluence integration
+JIRA_BASE_URL=https://your-domain.atlassian.net
+JIRA_API_TOKEN=your_base64_encoded_token
+CONFLUENCE_BASE_URL=https://your-domain.atlassian.net
+CONFLUENCE_API_TOKEN=your_base64_encoded_token
 ```
 
 ## Running Tests
