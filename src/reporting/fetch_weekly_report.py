@@ -1,5 +1,5 @@
 import logging
-from ..util.logging_config import setup_logging
+from ..config.logging_config import setup_logging
 from ..util.jira_rest_api import JiraRestApi
 
 jira = JiraRestApi()

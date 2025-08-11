@@ -4,7 +4,7 @@ import argparse
 import logging
 import sys
 from dotenv import load_dotenv
-from ..util.logging_config import setup_logging
+from ..config.logging_config import setup_logging
 from .sync import CreateEscWiki
 
 load_dotenv()

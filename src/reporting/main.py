@@ -5,7 +5,7 @@ import sys
 import os
 import json
 from datetime import datetime, timedelta
-from ..util.logging_config import setup_logging
+from ..config.logging_config import setup_logging
 from ..util.output_capture import TeeOutput
 from .fetch_esc_kpi import fetch_esc_kpi, analyze_filter_18891
 from .fetch_weekly_report import fetch_weekly_report
