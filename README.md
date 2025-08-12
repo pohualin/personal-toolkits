@@ -9,8 +9,8 @@ src/
 ├── customer-cleanup/    # Customer data transformation and cleanup
 │   ├── json_to_excel.py      # Convert JSON to Excel format
 │   └── customer_sync.py       # Customer data synchronization
-├── github-analytics/    # GitHub repository analysis
-│   └── projects_by_query.py   # Query and analyze GitHub projects
+├── github/              # GitHub repository analysis
+│   └── repos_by_query.py      # Query and analyze GitHub repositories
 ├── reporting/          # Report generation
 │   ├── main.py               # Combined reporting runner
 │   ├── fetch_esc_kpi.py      # ESC KPI metrics and analysis
@@ -60,13 +60,13 @@ python -m src.customer-cleanup.customer_sync
 ### GitHub Analytics
 ```bash
 # Basic usage
-python -m src.github-analytics.projects_by_query
+python -m src.github.repos_by_query
 
 # With custom query
-python -m src.github-analytics.projects_by_query -q "language:Python stars:>100"
+python -m src.github.repos_by_query -q "language:Python stars:>100"
 
 # Pull security alerts
-python -m src.github-analytics.projects_by_query -s
+python -m src.github.repos_by_query -s
 ```
 
 **Arguments:**
