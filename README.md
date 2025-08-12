@@ -19,7 +19,7 @@ src/
 │   ├── analyze_dependencies.py # Analyze project dependencies
 │   ├── build_dependency_tree.py # Build dependency trees
 │   └── parse_tree.py          # Parse dependency structures
-├── create-esc-wiki/    # ESC wiki page creation from Jira
+├── create_esc_wiki/    # ESC wiki page creation from Jira
 │   ├── sync.py               # Main sync logic
 │   └── main.py               # CLI entry point
 └── util/               # Shared utilities
@@ -97,7 +97,7 @@ python -m src.dependency-analysis.build_dependency_tree
 ### ESC Wiki Creation
 ```bash
 # Create wiki pages from Jira filter
-python -m src.create-esc-wiki.main -f 18871
+python -m src.create_esc_wiki.main -f 18871
 ```
 
 **Arguments:**
