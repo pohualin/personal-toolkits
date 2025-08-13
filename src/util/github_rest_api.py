@@ -6,12 +6,24 @@ class GithubUtils:
     github_token = os.getenv("GITHUB_TOKEN")
 
     @staticmethod
-    def search(query_string, per_page=100):
+    def make_request(url, params=None):
+        """Make a GitHub API request with proper headers and error handling."""
         headers = {"Accept": "application/vnd.github+json"}
         if GithubUtils.github_token:
             headers["Authorization"] = f"Bearer {GithubUtils.github_token}"
+        
+        response = requests.get(url, headers=headers, params=params)
+        return response
 
-        url = f"https://api.github.com/search/repositories"
+    @staticmethod
+    def get_dependabot_alerts(repo_owner, repo_name):
+        """Get Dependabot security alerts for a repository."""
+        url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/dependabot/alerts?state=open"
+        return GithubUtils.make_request(url)
+
+    @staticmethod
+    def search(query_string, per_page=100):
+        url = "https://api.github.com/search/repositories"
         params = {
             "q": f"{query_string}",
             "sort": "stars",
@@ -24,7 +36,7 @@ class GithubUtils:
         while True:
             params["page"] = page
             logging.info(f"Requesting page {page} for query '{query_string}' from GitHub API...")
-            resp = requests.get(url, headers=headers, params=params)
+            resp = GithubUtils.make_request(url, params)
             if resp.status_code != 200:
                 logging.error(f"GitHub API error: {resp.status_code} {resp.text}")
                 break

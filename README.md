@@ -15,7 +15,7 @@ src/
 │   ├── main.py               # Combined reporting runner
 │   ├── fetch_esc_kpi.py      # ESC KPI metrics and analysis
 │   └── fetch_weekly_report.py # Weekly objectives report
-├── dependency-analysis/ # Project dependency tools
+├── dependency/          # Project dependency tools
 │   ├── analyze_dependencies.py # Analyze project dependencies
 │   ├── build_dependency_tree.py # Build dependency trees
 │   └── parse_tree.py          # Parse dependency structures
@@ -90,8 +90,8 @@ python -m src.reporting.fetch_weekly_report
 
 ### Dependency Analysis
 ```bash
-python -m src.dependency-analysis.analyze_dependencies
-python -m src.dependency-analysis.build_dependency_tree
+python -m src.dependency.analyze_dependencies
+python -m src.dependency.build_dependency_tree
 ```
 
 ### ESC Wiki Creation
