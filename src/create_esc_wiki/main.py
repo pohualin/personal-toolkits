@@ -121,7 +121,7 @@ def main() -> None:
     for Jira tickets created in the last 7 days from the given filter.
     """
     parser = argparse.ArgumentParser(description="Create Confluence pages for each Jira ticket")
-    parser.add_argument('-f', '--filter-id', required=True, help='Jira filter ID')
+    parser.add_argument('-f', '--filter-id', default='18891', help='Jira filter ID (default: 18891)')
     args = parser.parse_args()
     
     try:

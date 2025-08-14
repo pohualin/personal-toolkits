@@ -8,6 +8,7 @@ import logging
 import re
 import argparse
 import xml.etree.ElementTree as ET
+import shutil
 
 from dotenv import load_dotenv
 from ..config.logging_config import setup_logging
@@ -38,8 +39,8 @@ def _process_folder(folder_name):
     
     # Setup output paths
     os.chdir(processing)
-    output_file_name = f"{processing}.tmp"
-    output_file_path = os.path.join(des_dir_json, output_file_name)
+    tmp_file_name = f"{processing}.tmp"
+    tmp_file_path = os.path.join(des_dir_json, tmp_file_name)
     
     # Run Maven dependency tree command
     logging.info(f"Running Maven dependency:tree in {processing}")
@@ -48,7 +49,7 @@ def _process_folder(folder_name):
             "mvn",
             "dependency:tree",
             "-DoutputType=json",
-            f"-DoutputFile={output_file_path}",
+            f"-DoutputFile={tmp_file_path}",
             f"-Dincludes={includes_filter}"
         ],
         stdout=subprocess.PIPE,
@@ -64,15 +65,15 @@ def _process_folder(folder_name):
     
     # Process the generated dependency tree file
     os.chdir(des_dir_json)
-    logging.info(f"Parsing dependency tree from {output_file_name}")
-    _build_tree_json(output_file_name)
+    logging.info(f"Parsing dependency tree from {tmp_file_name}")
+    _build_tree_json(tmp_file_name)
 
 
-def _build_tree_json(input_file):
+def _build_tree_json(tmp_file):
     """Convert Maven dependency tree text file to JSON format."""
     try:
         # Read dependency tree file
-        with open(input_file) as f:
+        with open(tmp_file) as f:
             lines = f.readlines()
         
         # Parse Maven dependency tree text output into structured JSON format
@@ -117,15 +118,18 @@ def _build_tree_json(input_file):
                     stack[-1][0]["dependencies"].append(dep)
                 stack.append((dep, depth))
         
-        out_file = input_file.rsplit('.', 1)[0] + ".json"
+        out_file = tmp_file.rsplit('.', 1)[0] + ".json"
         
-        # Write JSON output
-        with open(out_file, "w") as out_f:
-            json.dump(root, out_f, indent=2)
+        # Only write JSON output if root is not null
+        if root is None:
+            logging.info(f"JSON file is null for {out_file}")
+        else:
+            with open(out_file, "w") as out_f:
+                json.dump(root, out_f, indent=2)
+            logging.info(f"Created dependency tree JSON: {out_file}")
         
         # Clean up temporary file
-        os.remove(input_file)
-        logging.info(f"Created dependency tree JSON: {out_file}")
+        os.remove(tmp_file)
         
     except Exception as e:
         logging.error(f"Error parsing dependency tree: {e}")
@@ -185,9 +189,12 @@ def main():
         logging.error(f"Folder {repos_dir} does not exist.")
         sys.exit(1)
     
-    # Create destination directories
+    # Remove old and create new destination directories
     includes_name = includes_filter.replace(',', '-').replace('.', '_')
     base_dir = os.path.join(os.path.expanduser(analysis_dir), includes_name)
+    # Remove all files in base_dir if it exists
+    if os.path.exists(base_dir):
+        shutil.rmtree(base_dir)
     des_dir_json = os.path.join(base_dir, "json")
     des_dir_error = os.path.join(base_dir, "error")
     os.makedirs(des_dir_json, exist_ok=True)

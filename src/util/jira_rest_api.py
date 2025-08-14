@@ -58,3 +58,12 @@ class JiraRestApi:
         jql = filter_data.get("jql", "")
         search_result = self.search_issues(jql)
         return search_result.get("issues", [])
+    
+    def create_issue(self, issue_data: Dict) -> Dict:
+        """Create a new Jira issue"""
+        url = f"{self.base_url}/rest/api/3/issue"
+        
+        headers = {**self.headers, "Content-Type": "application/json"}
+        response = requests.post(url, json=issue_data, headers=headers)
+        response.raise_for_status()
+        return response.json()
