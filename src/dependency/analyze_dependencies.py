@@ -98,8 +98,35 @@ def print_analysis_results(all_deps, projects_analyzed, error_files):
     #     versions = len(set(all_deps['versions'][artifact]))
     #     print(f"{i:2d}. {artifact:<35} | {project_count:3d} projects | {total_usage:3d} total uses | {versions} versions")
 
-def export_to_excel(all_deps, output_file):
+def calculate_all_recursive_dependents(all_deps):
+    """Calculate recursive dependents for all artifacts using iterative BFS."""
+    result = {}
+    
+    for artifact in all_deps['artifact_projects']:
+        visited = set()
+        queue = [artifact]
+        all_dependents = set()
+        
+        while queue:
+            current = queue.pop(0)
+            if current in visited:
+                continue
+            visited.add(current)
+            
+            direct_deps = all_deps['artifact_projects'].get(current, set())
+            all_dependents.update(direct_deps)
+            queue.extend(direct_deps)
+        
+        result[artifact] = all_dependents
+    
+    return result
+
+def export_to_excel(all_deps, output_file, recursive=False):
     """Export analysis results to Excel file."""
+    # Calculate recursive dependents if requested
+    if recursive:
+        recursive_deps_cache = calculate_all_recursive_dependents(all_deps)
+    
     # Prepare data for Excel export
     excel_data = []
     
@@ -107,7 +134,12 @@ def export_to_excel(all_deps, output_file):
         # Get unique projects (dependents)
         unique_dependents = sorted(list(projects))
         unique_dependents_str = ', '.join(unique_dependents)
-        total_dependents = len(projects)
+        
+        # Calculate total dependents based on recursive flag
+        if recursive:
+            total_dependents = len(recursive_deps_cache[artifact_name])
+        else:
+            total_dependents = len(projects)
         
         # Get unique versions for this artifact
         versions = list(set(all_deps['versions'][artifact_name]))
@@ -176,7 +208,7 @@ def export_to_excel(all_deps, output_file):
         return False, f"Error exporting to Excel: {str(e)}"
 
 if __name__ == "__main__":
-    json_directory = "/Users/PLin/Workspace/analysis/json"
+    json_directory = "/Users/PLin/Workspace/analysis/com_trustwave-com_trustwave_dna/json"
     
     print("🚀 Starting dependency analysis...")
     all_deps, projects, errors = analyze_json_files(json_directory)
@@ -187,7 +219,7 @@ if __name__ == "__main__":
     excel_file = f"/Users/PLin/Workspace/analysis/dependency_analysis_{timestamp}.xlsx"
     
     print(f"\n📊 Exporting results to Excel...")
-    success, message = export_to_excel(all_deps, excel_file)
+    success, message = export_to_excel(all_deps, excel_file, recursive=False)
     
     if success:
         print(f"✅ {message}")

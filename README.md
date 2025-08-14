@@ -6,7 +6,7 @@ A collection of Python automation scripts organized by domain for data processin
 
 ```
 src/
-├── customer-cleanup/    # Customer data transformation and cleanup
+├── customer_cleanup/    # Customer data transformation and cleanup
 │   ├── json_to_excel.py      # Convert JSON to Excel format
 │   └── customer_sync.py       # Customer data synchronization
 ├── github/              # GitHub repository analysis
@@ -15,20 +15,22 @@ src/
 │   ├── main.py               # Combined reporting runner
 │   ├── fetch_esc_kpi.py      # ESC KPI metrics and analysis
 │   └── fetch_weekly_report.py # Weekly objectives report
-├── dependency/          # Project dependency tools
-│   ├── analyze_dependencies.py # Analyze project dependencies
-│   ├── build_dependency_tree.py # Build dependency trees
-│   └── parse_tree.py          # Parse dependency structures
+├── dependency/          # Project dependency analysis tools
+│   ├── analyze_dependencies.py # Analyze JSON dependency files
+│   ├── build_tree_json.py     # Generate Maven dependency trees as JSON
+│   └── extract_versions.py    # Extract specific dependency versions
 ├── create_esc_wiki/    # ESC wiki page creation from Jira
-│   ├── sync.py               # Main sync logic
-│   └── main.py               # CLI entry point
+│   └── main.py               # Create Confluence pages from Jira filter
+├── jira/               # Jira ticket management
+│   └── create_tickets.py     # Create Jira tickets from Excel data
+├── config/             # Configuration modules
+│   └── logging_config.py     # Global logging configuration
 └── util/               # Shared utilities
     ├── data_processor.py      # Data processing utilities
     ├── file_utils.py          # File operations
-    ├── github_utils.py        # GitHub API utilities
+    ├── github_rest_api.py     # GitHub API client
     ├── jira_rest_api.py       # Jira REST API client
     ├── wiki_rest_api.py       # Confluence REST API client
-    ├── logging_config.py      # Global logging configuration
     └── output_capture.py      # Output capture utilities
 ```
 
@@ -53,8 +55,8 @@ pip install -e ".[dev]"
 
 ### Customer Cleanup
 ```bash
-python -m src.customer-cleanup.json_to_excel
-python -m src.customer-cleanup.customer_sync
+python -m src.customer_cleanup.json_to_excel
+python -m src.customer_cleanup.customer_sync
 ```
 
 ### GitHub Analytics
@@ -90,18 +92,41 @@ python -m src.reporting.fetch_weekly_report
 
 ### Dependency Analysis
 ```bash
+# Analyze JSON dependency files and export to Excel
 python -m src.dependency.analyze_dependencies
-python -m src.dependency.build_dependency_tree
+
+# Generate Maven dependency trees as JSON
+python -m src.dependency.build_tree_json
+
+# Extract specific dependency versions
+python -m src.dependency.extract_versions -g com.h2database -a h2 -v 2.1.214
 ```
+
+**Arguments for build_tree_json:**
+- `-i, --includes`: Maven includes filter (default: com.trustwave,com.trustwave.dna)
+
+**Arguments for extract_versions:**
+- `-g, --groupId`: Group ID (e.g., com.h2database)
+- `-a, --artifactId`: Artifact ID (e.g., h2)
+- `-v, --version`: Version to compare against
 
 ### ESC Wiki Creation
 ```bash
-# Create wiki pages from Jira filter
+# Create wiki pages from Jira filter (default filter: 18891)
+python -m src.create_esc_wiki.main
+
+# Use custom filter
 python -m src.create_esc_wiki.main -f 18871
 ```
 
 **Arguments:**
-- `-f, --filter-id`: Jira filter ID to sync issues from
+- `-f, --filter-id`: Jira filter ID (default: 18891)
+
+### Jira Ticket Management
+```bash
+# Create Jira tickets from Excel data
+python -m src.jira.create_tickets
+```
 
 ## Configuration
 
