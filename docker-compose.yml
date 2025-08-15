@@ -1,0 +1,35 @@
+services:
+  work-toolkits:
+    build: .
+    image: work-toolkits
+    container_name: work-toolkits
+    environment:
+      # Required directories (mapped to container paths)
+      - CUSTOMER_SYNC_DIR=/app/data/customer_sync
+      - ANALYSIS_DIR=/app/data/analysis
+      - REPOS_DIR=/app/data/repos
+      
+      # API tokens (set these in .env file)
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - JIRA_BASE_URL=${JIRA_BASE_URL}
+      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+      - CONFLUENCE_BASE_URL=${CONFLUENCE_BASE_URL}
+      - CONFLUENCE_API_TOKEN=${CONFLUENCE_API_TOKEN}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    
+    volumes:
+      # Mount data directories
+      - ~/Workspace/customer_sync:/app/data/customer_sync
+      - ~/Workspace/analysis:/app/data/analysis
+      - ~/Workspace/all:/app/data/all
+      - ./weekly_report:/app/weekly_report
+      
+      # Mount .env file if it exists
+      - ./.env:/app/.env:ro
+    
+    # Run cron in foreground
+    command: sh -c "crontab /app/crontab && cron -f"
+    
+    # Keep container running for interactive use
+    stdin_open: true
+    tty: true
