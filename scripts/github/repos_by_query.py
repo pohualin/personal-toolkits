@@ -13,12 +13,15 @@ import logging
 import os
 import re
 import subprocess
+import sys
 from datetime import datetime
 from typing import Dict, List
 import pandas as pd
 from dotenv import load_dotenv
-from ..util.github_rest_api import GithubUtils
-from ..config.logging_config import setup_logging
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+from api.github_rest_api import GithubUtils
+from config.logging_config import setup_logging
 
 load_dotenv()
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))

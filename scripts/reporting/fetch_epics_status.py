@@ -1,7 +1,11 @@
 import argparse
 import logging
-from ..config.logging_config import setup_logging
-from ..util.jira_rest_api import JiraRestApi
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+
+from config.logging_config import setup_logging
+from api.jira_rest_api import JiraRestApi
 
 setup_logging()
 

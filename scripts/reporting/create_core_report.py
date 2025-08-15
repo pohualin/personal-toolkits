@@ -5,8 +5,12 @@ import sys
 import os
 import json
 from datetime import datetime, timedelta
-from ..config.logging_config import setup_logging
-from ..util.output_capture import TeeOutput
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+
+from config.logging_config import setup_logging
+from util.output_capture import TeeOutput
 from .fetch_esc_kpi import fetch_esc_kpi
 from .analyze_esc_filter import analyze_esc_filter
 from .fetch_epics_status import fetch_epics_status

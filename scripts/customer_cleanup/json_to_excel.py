@@ -1,8 +1,11 @@
 """Convert JSON customer data to Excel format."""
 
 import os
+import sys
 from dotenv import load_dotenv
-from util.data_processor import JSONProcessor, ExcelExporter
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+from util.data_processor import load_json, extract_customers, export_to_excel
 from util.file_utils import ensure_file_exists, generate_timestamped_filename
 
 load_dotenv()
@@ -25,8 +28,8 @@ def parse_json_to_excel(input_file: str = None, output_dir: str = None) -> None:
     
     try:
         # Load and process data
-        data = JSONProcessor.load_json(input_file)
-        customers = JSONProcessor.extract_customers(data)
+        data = load_json(input_file)
+        customers = extract_customers(data)
         
         print(f"Extracted {len(customers)} customers")
         
@@ -36,7 +39,7 @@ def parse_json_to_excel(input_file: str = None, output_dir: str = None) -> None:
         )
         
         # Export to Excel
-        df = ExcelExporter.export_to_excel(
+        df = export_to_excel(
             customers, 
             output_file, 
             ['Customer ID', 'Customer Name', 'Products']

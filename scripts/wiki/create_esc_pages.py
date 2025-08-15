@@ -6,9 +6,13 @@ import sys
 from datetime import datetime, timedelta
 from typing import Dict
 from dotenv import load_dotenv
-from ..util.jira_rest_api import JiraRestApi
-from ..util.wiki_rest_api import WikiRestApi
-from ..config.logging_config import setup_logging
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+
+from api.jira_rest_api import JiraRestApi
+from api.wiki_rest_api import WikiRestApi
+from config.logging_config import setup_logging
 
 load_dotenv()
 setup_logging()

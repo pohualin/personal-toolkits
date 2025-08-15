@@ -3,8 +3,11 @@
 import pandas as pd
 import os
 import logging
-from ..util.jira_rest_api import JiraRestApi
-from ..config.logging_config import setup_logging
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+from api.jira_rest_api import JiraRestApi
+from config.logging_config import setup_logging
 
 setup_logging()
 
