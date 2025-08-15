@@ -7,8 +7,14 @@ import json
 from datetime import datetime, timedelta
 from ..config.logging_config import setup_logging
 from ..util.output_capture import TeeOutput
-from .fetch_esc_kpi import fetch_esc_kpi, analyze_filter_18891
-from .fetch_weekly_report import fetch_weekly_report
+from .fetch_esc_kpi import fetch_esc_kpi
+from .analyze_esc_filter import analyze_esc_filter
+from .fetch_epics_status import fetch_epics_status
+
+# Filter IDs for reporting
+ESC_FILTER_ID = "18891"
+ESC_KPI_FILTERS = ["18891", "19040", "19041"]
+EPICS_FILTER_ID = "18871"
 
 def main():
     """Run ESC KPI report followed by weekly report"""
@@ -30,14 +36,14 @@ def main():
         # Run ESC KPI report
         logging.info("Starting ESC KPI report")
         print(f"Weekly Report Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        kpi_data = fetch_esc_kpi()
-        analysis_data = analyze_filter_18891()
+        kpi_data = fetch_esc_kpi(ESC_KPI_FILTERS)
+        analysis_data = analyze_esc_filter(ESC_FILTER_ID)
         
         print("\n" + "="*80 + "\n")
         
         # Run weekly report
         logging.info("Starting weekly report")
-        weekly_data = fetch_weekly_report()
+        weekly_data = fetch_epics_status(EPICS_FILTER_ID)
         
         # Save JSON report
         json_data = {

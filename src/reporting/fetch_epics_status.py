@@ -1,10 +1,11 @@
+import argparse
 import logging
 from ..config.logging_config import setup_logging
 from ..util.jira_rest_api import JiraRestApi
 
-jira = JiraRestApi()
+setup_logging()
 
-def analyze_epic(epic_key):
+def analyze_epic(jira, epic_key):
     """Analyze a single epic and return structured data"""
     try:
         epic_key = epic_key.replace('"', '')
@@ -34,33 +35,37 @@ def analyze_epic(epic_key):
             "error": str(e)
         }
 
-def fetch_weekly_report():
-    """Fetch weekly report data from filter 18871"""
-    logging.info("Fetching filter 18871 for weekly report")
+def fetch_epics_status(filter_id="18871"):
+    """Fetch epic status data from filter"""
+    jira = JiraRestApi()
+    logging.info(f"Fetching filter {filter_id} for epic status")
     
     try:
-        # Get epics from filter
-        issues = jira.get_issues_from_filter("18871")
+        issues = jira.get_issues_from_filter(filter_id)
         epic_keys = [issue["id"] for issue in issues]
         
-        print(f"\n=== High Level Objectives ===")
+        print("\n=== High Level Objectives ===")
         
         results = []
         for key in epic_keys:
-            epic_data = analyze_epic(key)
+            epic_data = analyze_epic(jira, key)
             results.append(epic_data)
             
-            # Print formatted row
-            print(f"{epic_data['epic_key']},{epic_data['summary']},{epic_data['total_issues']},{epic_data['done_issues']}")        
+            print(f"{epic_data['epic_key']},{epic_data['summary']},{epic_data['total_issues']},{epic_data['done_issues']}")
+        
         return results
         
     except Exception as e:
-        logging.error(f"Error fetching weekly report: {e}")
+        logging.error(f"Error fetching epic status: {e}")
         return []
 
 def main():
-    """Main function for weekly report"""
-    return fetch_weekly_report()
+    """Main function for epic status"""
+    parser = argparse.ArgumentParser(description="Fetch epic status from Jira filter")
+    parser.add_argument('-f', '--filter-id', default='18871', help='Jira filter ID (default: 18871)')
+    args = parser.parse_args()
+    
+    return fetch_epics_status(args.filter_id)
 
 if __name__ == "__main__":
     main()
