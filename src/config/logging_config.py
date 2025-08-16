@@ -14,6 +14,15 @@ def setup_logging():
     # Set specific loggers to WARNING to reduce noise
     logging.getLogger('urllib3').setLevel(logging.WARNING)
     logging.getLogger('requests').setLevel(logging.WARNING)
+    
+    return logging.getLogger(__name__)
+
+# def setup_logging():
+#     logging.basicConfig(
+#         level=logging.INFO,
+#         format="%(asctime)s [%(levelname)s] %(message)s"
+#     )
+#     return logging.getLogger(__name__)
 
 # Initialize logging when module is imported
 setup_logging()
