@@ -1,42 +1,42 @@
-# Work Toolkits
 
-A collection of Python automation tools for work productivity, including Jira/Confluence integration, reporting, GitHub analytics, dependency analysis, and data processing.
+# Personal Toolkits
+
+A collection of Python automation tools for productivity, reporting, and data processing.
 
 ## Project Structure
 
 ```
-src/                    # Library code
-├── api/               # External API clients
-│   ├── jira_rest_api.py      # Jira REST API client
-│   ├── wiki_rest_api.py      # Confluence REST API client
-│   └── github_rest_api.py    # GitHub API client
-├── util/              # General utilities
-│   ├── data_processor.py     # Data processing functions
-│   ├── file_utils.py         # File operations
-│   └── output_capture.py     # Output capture utilities
-└── config/            # Configuration
-    └── logging_config.py     # Global logging setup
+src/
+    api/         # External API clients (Jira, Confluence, GitHub)
+    config/      # Configuration and logging
+    util/        # General utilities
+    scripts/     # Executable scripts (Twitter, Wiki, etc.)
+tests/         # Unit tests
+weekly_report/ # Generated reports
+```
 
-scripts/               # Executable scripts
-├── reporting/         # Report generation
-│   ├── create_core_report.py # Combined reporting runner
-│   ├── fetch_esc_kpi.py      # ESC KPI metrics
-│   ├── analyze_esc_filter.py # ESC filter analysis
-│   └── fetch_epics_status.py # Epic status reporting
-├── wiki/              # Wiki/Confluence automation
-│   ├── create_esc_pages.py   # Create ESC pages from filter
-│   └── create_issue_page.py  # Create page for single issue
-├── jira/              # Jira automation
-│   └── create_tickets.py     # Create tickets from Excel
-├── github/            # GitHub analytics
-│   └── repos_by_query.py     # Repository analysis
-├── dependency/        # Dependency analysis
-│   ├── analyze_dependencies.py # Analyze JSON dependencies
-│   ├── build_tree_json.py     # Generate dependency trees
-│   └── extract_versions.py    # Extract versions
-└── customer_cleanup/  # Data processing
-    ├── json_to_excel.py      # JSON to Excel conversion
-    └── customer_sync.py       # Customer data sync
+## Installation
+
+```bash
+pip install -e .
+```
+
+## Usage
+
+Scripts are now located in `src/scripts/`. Example:
+
+```bash
+python src/scripts/twitter/download_by_channel.py <channel_name> [<post_id>]
+```
+
+## Configuration
+
+Create a `.env` file in the project root with required and optional environment variables for API tokens, directories, and logging.
+
+## Running Tests
+
+```bash
+python -m unittest discover -s tests
 ```
 
 ## Installation
