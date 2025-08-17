@@ -16,7 +16,10 @@ setup(
         "python-dotenv>=0.19.0",
         "pandas>=1.3.0",
         "openpyxl>=3.0.0",
-        "pytest>=6.0.0"
+        "pytest>=6.0.0",
+        "pytube>=12.1.0",
+        "youtube-transcript-api>=0.4.1",
+        "openAI>=0.27.0"
     ],
     extras_require={
         'dev': [
