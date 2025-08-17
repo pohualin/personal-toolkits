@@ -18,7 +18,3 @@ COPY . .
 
 # Set environment variables if needed
 ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
-
-# Default command (adjust as needed)
-CMD ["python", "scripts/main.py"]

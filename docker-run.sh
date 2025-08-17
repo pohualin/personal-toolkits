@@ -1,13 +1,14 @@
 #!/bin/bash
+set -e
 
-# Create data directories if they don't exist (customer_sync mounted from ~/Workspace/customer_sync)
-mkdir -p data/analysis data/repos weekly_report
+# Build the Docker image
+docker compose build
 
-# Build and run with docker-compose
-docker-compose up --build
+# Run the container
+docker compose up -d
 
-# Alternative: Run specific script
-# docker-compose run --rm work-toolkits python scripts/github/repos_by_query.py
+# Show running containers
+# docker compose ps
 
-# Interactive mode
-# docker-compose run --rm -it work-toolkits bash
+# Show logs
+# docker compose logs -f

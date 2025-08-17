@@ -1,35 +1,37 @@
 services:
-  work-toolkits:
+  personal-toolkits:
     build: .
-    image: work-toolkits
-    container_name: work-toolkits
+    image: personal-toolkits
+    container_name: personal-toolkits
     environment:
       # Required directories (mapped to container paths)
-      - CUSTOMER_SYNC_DIR=/app/data/customer_sync
-      - ANALYSIS_DIR=/app/data/analysis
-      - REPOS_DIR=/app/data/repos
+      # - CUSTOMER_SYNC_DIR=/app/data/customer_sync
+      # - ANALYSIS_DIR=/app/data/analysis
+      # - REPOS_DIR=/app/data/repos
       
       # API tokens (set these in .env file)
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - JIRA_BASE_URL=${JIRA_BASE_URL}
-      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
-      - CONFLUENCE_BASE_URL=${CONFLUENCE_BASE_URL}
-      - CONFLUENCE_API_TOKEN=${CONFLUENCE_API_TOKEN}
+      # - GITHUB_TOKEN=${GITHUB_TOKEN}
+      # - JIRA_BASE_URL=${JIRA_BASE_URL}
+      # - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+      # - CONFLUENCE_BASE_URL=${CONFLUENCE_BASE_URL}
+      # - CONFLUENCE_API_TOKEN=${CONFLUENCE_API_TOKEN}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     
     volumes:
       # Mount data directories
-      - ~/Workspace/customer_sync:/app/data/customer_sync
-      - ~/Workspace/analysis:/app/data/analysis
-      - ~/Workspace/all:/app/data/all
-      - ./weekly_report:/app/weekly_report
+      # - ~/Workspace/customer_sync:/app/data/customer_sync
+      # - ~/Workspace/analysis:/app/data/analysis
+      # - ~/Workspace/all:/app/data/all
+      # - ./weekly_report:/app/weekly_report
       
       # Mount .env file if it exists
       - ./.env:/app/.env:ro
-    
+      - ./token.json:/app/token.json:ro
+      - ./logs:/tmp
+
     # Run cron in foreground
-    command: sh -c "crontab /app/crontab && cron -f"
-    
+    command: sh -c "python -m scripts.main && crontab /app/crontab && cron -f & tail -F /tmp/cron.log & wait"
+
     # Keep container running for interactive use
     stdin_open: true
     tty: true

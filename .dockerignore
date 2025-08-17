@@ -14,18 +14,6 @@ __pycache__/
 .venv/
 results.json
 token.json
-.tox
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-.git
-.mypy_cache
-.pytest_cache
-.hypothesis
 
 # OS
 .DS_Store
