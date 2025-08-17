@@ -9,20 +9,16 @@ RUN apt-get update && apt-get install -y \
     cron \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
-COPY src/ ./src/
-COPY scripts/ ./scripts/
-COPY crontab /app/crontab
+# Copy project files
+COPY . .
 
-# Create directories for outputs
-RUN mkdir -p /app/data/customer_sync \
-    /app/data/analysis \
-    /app/data/repos \
-    /app/weekly_report
-
-# Set Python path
+# Set environment variables if needed
+ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
+
+# Default command (adjust as needed)
+CMD ["python", "scripts/main.py"]

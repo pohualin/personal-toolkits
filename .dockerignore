@@ -3,14 +3,17 @@
 .gitignore
 
 # Python
-__pycache__
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-env
-pip-log.txt
-pip-delete-this-directory.txt
+*.db
+*.sqlite3
+.env
+.vscode/
+.venv/
+results.json
+token.json
 .tox
 .coverage
 .coverage.*
