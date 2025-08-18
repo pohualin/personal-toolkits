@@ -6,7 +6,7 @@ PYTHONPATH=/app
 # 0 * * * * cd /app && /usr/local/bin/python scripts/test_cron.py >> /tmp/cron.log 2>&1
 
 # Check youtube once an hour
-* 7,11,15,19 * * * cd /app && /usr/local/bin/python -m scripts.youtube.main >> /tmp/cron.log 2>&1
+0 7,11,15,19 * * * cd /app && /usr/local/bin/python -m scripts.youtube.main >> /tmp/cron.log 2>&1
 
 # Weekly GitHub sync on Mondays at 8 AM (commented out for testing)
 # 0 8 * * 1 cd /app && /usr/local/bin/python scripts/github/repos_by_query.py >> /tmp/cron.log 2>&1
