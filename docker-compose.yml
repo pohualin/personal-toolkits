@@ -16,7 +16,8 @@ services:
       # - CONFLUENCE_BASE_URL=${CONFLUENCE_BASE_URL}
       # - CONFLUENCE_API_TOKEN=${CONFLUENCE_API_TOKEN}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
-    
+      - TZ=America/Chicago
+
     volumes:
       # Mount data directories
       # - ~/Workspace/customer_sync:/app/data/customer_sync
