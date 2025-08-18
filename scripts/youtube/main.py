@@ -2,7 +2,7 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
-from util.gmail_util import send_gmail
+from src.util.gmail_util import send_gmail
 from src.util.youtube_util import search_youtube, get_transcript
 from src.util.perplexity_util import summarize_text
 import html

@@ -2,11 +2,11 @@ PATH=/usr/local/bin:/usr/bin:/bin
 PYTHONPATH=/app
 
 # Test cron job - runs every hour
-* * * * * cd /app && /usr/local/bin/python scripts/test_cron.py >> /tmp/cron.log 2>&1
+# * * * * * cd /app && /usr/local/bin/python scripts/test_cron.py >> /tmp/cron.log 2>&1
 # 0 * * * * cd /app && /usr/local/bin/python scripts/test_cron.py >> /tmp/cron.log 2>&1
 
-# Daily report at 9 AM (commented out for testing)
-# 0 9 * * * cd /app && /usr/local/bin/python scripts/reporting/create_core_report.py >> /var/log/cron.log 2>&1
+# Check youtube once an hour
+0 * * * * cd /app && /usr/local/bin/python -m scripts.youtube.main >> /tmp/cron.log 2>&1
 
 # Weekly GitHub sync on Mondays at 8 AM (commented out for testing)
-# 0 8 * * 1 cd /app && /usr/local/bin/python scripts/github/repos_by_query.py >> /var/log/cron.log 2>&1
+# 0 8 * * 1 cd /app && /usr/local/bin/python scripts/github/repos_by_query.py >> /tmp/cron.log 2>&1
