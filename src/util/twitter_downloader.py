@@ -6,7 +6,7 @@ import bs4
 from tqdm import tqdm
 from pathlib import Path
 from dotenv import load_dotenv
-from config.logging_config import setup_logging
+from src.config.logging_config import setup_logging
 
 logger = setup_logging()
 load_dotenv()
