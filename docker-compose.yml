@@ -28,6 +28,7 @@ services:
       # Mount .env file if it exists
       - ./.env:/app/.env:ro
       - ./token.json:/app/token.json:ro
+      - ./sheet-token.json:/app/sheet-token.json:ro
       - ./logs:/tmp
 
     # Run cron in foreground

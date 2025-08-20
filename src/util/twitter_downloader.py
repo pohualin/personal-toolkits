@@ -2,13 +2,19 @@ import os
 import re
 import requests
 import bs4
+
 from tqdm import tqdm
 from pathlib import Path
-from src.config.logging_config import setup_logging
+from dotenv import load_dotenv
+from config.logging_config import setup_logging
 
 logger = setup_logging()
+load_dotenv()
+TWITTER_DOWNLOAD_DIR=os.environ.get("TWITTER_DOWNLOAD_DIR")
+if not TWITTER_DOWNLOAD_DIR:
+    raise ValueError("TWITTER_DOWNLOAD_DIR environment variable is not set or empty.")
 
-def download_video(url, file_name) -> None:
+def download_video(url, channel_id, file_name) -> None:
     """Download a video from a URL into a filename.
 
     Args:
@@ -21,15 +27,17 @@ def download_video(url, file_name) -> None:
     block_size = 1024
     progress_bar = tqdm(total=total_size, unit="B", unit_scale=True)
 
-    download_path = os.path.join(Path.home(), "Downloads", file_name)
+    download_path = os.path.join(os.path.expanduser(TWITTER_DOWNLOAD_DIR), channel_id, file_name)
+    os.makedirs(os.path.dirname(download_path), exist_ok=True)
 
+    logger.info(f"Downloading video: {file_name}")
     with open(download_path, "wb") as file:
         for data in response.iter_content(block_size):
             progress_bar.update(len(data))
             file.write(data)
 
     progress_bar.close()
-    logger.info("Video downloaded successfully!")  # Use logger instead of print
+    logger.info(f"Video downloaded successfully to {download_path}")
 
 
 def download_twitter_video(url):
@@ -52,15 +60,13 @@ def download_twitter_video(url):
     highest_quality_url = download_link_tag.get("href")
 
     # Extract file name (fallback to default if not found)
-    file_name_tag = data.find("div", class_="leading-tight")
-    if file_name_tag:
-        p_tag = file_name_tag.find("p", class_="m-2")
-        if p_tag and p_tag.text:
-            file_name = re.sub(r"[^a-zA-Z0-9]+", " ", p_tag.text).strip() + ".mp4"
-        else:
-            file_name = "twitter_video.mp4"
+    match = re.search(r"x\.com/([^/]+)/status/(\d+)", url)
+    if match:
+        channel_id = match.group(1)
+        post_id = match.group(2)
+        file_name = f"{channel_id}-{post_id}.mp4"
     else:
-        file_name = "twitter_video.mp4"
-
-    logger.info(f"Downloading video: {file_name} from {highest_quality_url}")
-    # download_video(highest_quality_url, file_name)
+        logger.error("Could not extract file name from the Twitter URL.")
+        return
+    
+    download_video(highest_quality_url, channel_id, file_name)

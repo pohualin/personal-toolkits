@@ -10,7 +10,7 @@ import html
 load_dotenv()  # Load environment variables from .env
 
 def main():
-    handles = ["@GeorgeGammon", "@RebelCapitalistInterviews", "@GoldSilver", "@NeilMcCoyWard", "@HOWGG"]
+    handles = os.getenv("YOUTUBE_HANDLES", "").split(",")
     results = []
     for handle in handles:
         videos = search_youtube(handle, 14)
