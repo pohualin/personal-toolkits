@@ -27,7 +27,7 @@ def download_video(url, channel_id, file_name) -> None:
     block_size = 1024
     progress_bar = tqdm(total=total_size, unit="B", unit_scale=True)
 
-    download_path = os.path.join(os.path.expanduser(TWITTER_DOWNLOAD_DIR), channel_id, file_name)
+    download_path = os.path.join(TWITTER_DOWNLOAD_DIR, channel_id, file_name)
     os.makedirs(os.path.dirname(download_path), exist_ok=True)
 
     logger.info(f"Downloading video: {file_name}")
