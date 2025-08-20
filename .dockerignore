@@ -14,6 +14,7 @@ __pycache__/
 .venv/
 results.json
 token.json
+sheet-token.json
 
 # OS
 .DS_Store

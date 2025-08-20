@@ -24,7 +24,8 @@ services:
       # - ~/Workspace/analysis:/app/data/analysis
       # - ~/Workspace/all:/app/data/all
       # - ./weekly_report:/app/weekly_report
-      
+      - /mnt/hgst-1/Twitter:~/Downloads/Twitter
+
       # Mount .env file if it exists
       - ./.env:/app/.env:ro
       - ./token.json:/app/token.json:ro
