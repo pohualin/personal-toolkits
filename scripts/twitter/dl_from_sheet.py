@@ -6,15 +6,9 @@ from src.util.google_sheet_util import read_sheet
 logger = setup_logging()
 
 def main():
-    # if len(sys.argv) < 3:
-    #     logger.error("Usage: python dl_from_sheet.py <spreadsheet_id> <range>")
-    #     sys.exit(1)
-
-    # spreadsheet_id = sys.argv[1]
-    # range_name = sys.argv[2]
-
+    logger.info("Starting Twitter video download from Google Sheet")
     try:
-        urls = read_sheet("1h0K5yDn0oPijTr7axw__LYzZoHhGt4FE2PE4M5h2WJs", 'Sheet1!A1:A10')  # Replace with actual spreadsheet_id and range_name
+        urls = read_sheet("1h0K5yDn0oPijTr7axw__LYzZoHhGt4FE2PE4M5h2WJs", 'X_URL')
     except Exception as e:
         logger.error(f"Failed to read sheet: {e}")
         sys.exit(1)
