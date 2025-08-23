@@ -2,7 +2,7 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
-from src.util.gmail_util import send_gmail
+from src.util.gmail_util import send
 from src.util.youtube_util import search_youtube, get_transcript
 from src.util.perplexity_util import summarize_text
 import html
@@ -39,7 +39,7 @@ def main():
                 }
             )
     results.sort(key=lambda x: x["published"], reverse=True)
-    send_gmail(
+    send(
         "YouTube Daily Digest", json.dumps(results, ensure_ascii=False, indent=2), "pohualin@gmail.com"
     )
     with open("results.json", "w") as f:

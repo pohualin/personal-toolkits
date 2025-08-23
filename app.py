@@ -1,4 +1,5 @@
 import streamlit as st
+import sys
 from src.util.twitter_downloader import download_twitter_video
 from src.util.youtube_util import search_youtube
 from src.util.google_sheet_util import read_sheet
@@ -39,7 +40,6 @@ if st.button("Read Sheet"):
 st.header("Download Twitter Videos from Google Sheet")
 if st.button("Download from Sheet"):
     # You may need to refactor dl_from_sheet.main to accept arguments
-    import sys
     sys.argv = ["dl_from_sheet.py"]
     dl_from_sheet_main()
     st.success("Download from sheet started!")

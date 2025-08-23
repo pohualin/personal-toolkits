@@ -5,7 +5,7 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-def send_gmail(subject, body, to):
+def send(subject, body, to):
     """
     Send an email using Gmail API.
 
@@ -42,4 +42,4 @@ def send_gmail(subject, body, to):
     return send_message
 
 # Example usage:
-# send_gmail("Test Subject", "Hello from Gmail API!", "recipient@example.com")
+# send("Test Subject", "Hello from Gmail API!", "recipient@example.com")
