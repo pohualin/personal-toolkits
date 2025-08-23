@@ -4,37 +4,32 @@ services:
     image: personal-toolkits
     container_name: personal-toolkits
     environment:
-      # Required directories (mapped to container paths)
-      # - CUSTOMER_SYNC_DIR=/app/data/customer_sync
-      # - ANALYSIS_DIR=/app/data/analysis
-      # - REPOS_DIR=/app/data/repos
-      
-      # API tokens (set these in .env file)
-      # - GITHUB_TOKEN=${GITHUB_TOKEN}
-      # - JIRA_BASE_URL=${JIRA_BASE_URL}
-      # - JIRA_API_TOKEN=${JIRA_API_TOKEN}
-      # - CONFLUENCE_BASE_URL=${CONFLUENCE_BASE_URL}
-      # - CONFLUENCE_API_TOKEN=${CONFLUENCE_API_TOKEN}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - TZ=America/Chicago
-
     volumes:
-      # Mount data directories
-      # - ~/Workspace/customer_sync:/app/data/customer_sync
-      # - ~/Workspace/analysis:/app/data/analysis
-      # - ~/Workspace/all:/app/data/all
-      # - ./weekly_report:/app/weekly_report
       - /mnt/hgst-1/Twitter:/mnt/Twitter
-
-      # Mount .env file if it exists
       - ./.env_jmusk:/app/.env:ro
       - ./token.json:/app/token.json:ro
       - ./sheet-token.json:/app/sheet-token.json:ro
       - ./logs:/tmp
-
-    # Run cron in foreground
     command: sh -c "python -m scripts.main && crontab /app/crontab && cron -f & tail -F /tmp/cron.log & wait"
+    stdin_open: true
+    tty: true
 
-    # Keep container running for interactive use
+  streamlit:
+    image: personal-toolkits
+    container_name: streamlit-ui
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - TZ=America/Chicago
+    volumes:
+      - /mnt/hgst-1/Twitter:/mnt/Twitter
+      - ./.env_jmusk:/app/.env:ro
+      - ./token.json:/app/token.json:ro
+      - ./sheet-token.json:/app/sheet-token.json:ro
+      - ./logs:/tmp
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
     stdin_open: true
     tty: true
