@@ -13,7 +13,7 @@ __pycache__/
 .env_jmusk
 .vscode/
 .venv/
-results.json
+gmaiil_credentials.json
 token.json
 sheet-token.json
 
