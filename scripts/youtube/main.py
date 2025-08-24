@@ -3,7 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 from src.util.gmail_util import send
-from src.util.youtube_util import search_youtube, get_transcript
+from src.util.youtube_util import videos_by_handle, get_transcript
 from src.util.perplexity_util import summarize_text
 import html
 
@@ -13,7 +13,7 @@ def main():
     handles = os.getenv("YOUTUBE_HANDLES", "").split(",")
     results = []
     for handle in handles:
-        videos = search_youtube(handle, 14)
+        videos = videos_by_handle(handle, 14)
         for v in videos:
             video_id = v["video_id"]
             # transcript = get_transcript(video_id)
