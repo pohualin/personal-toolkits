@@ -1,7 +1,6 @@
 import streamlit as st
 import sys
 from src.util.twitter_downloader import download_twitter_video
-from src.util.youtube_util import search_youtube
 from src.util.google_sheet_util import read_sheet
 from scripts.twitter.dl_from_sheet import main as dl_from_sheet_main
 
