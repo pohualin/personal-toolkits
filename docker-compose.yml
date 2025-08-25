@@ -25,8 +25,8 @@ services:
     volumes:
       - /mnt/hgst-1/Twitter:/mnt/Twitter
       - ./.env_jmusk:/app/.env:ro
-      - ./token.json:/app/token.json:ro
-      - ./sheet-token.json:/app/sheet-token.json:ro
+      - ./token.json:/app/token.json
+      - ./sheet-token.json:/app/sheet-token.json
       - ./logs:/tmp
     command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
     ports:
