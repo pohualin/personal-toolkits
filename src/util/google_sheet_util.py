@@ -1,7 +1,7 @@
 import os
 from src.config.logging_config import setup_logging
 from googleapiclient.discovery import build
-from src.util.auth import get_gsheet_creds
+from src.config.auth import get_gsheet_creds
 
 logger = setup_logging()
 
