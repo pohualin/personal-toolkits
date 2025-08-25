@@ -16,16 +16,16 @@ if st.button("Download Twitter Video"):
     else:
         st.error("Please enter a Twitter video URL.")
 
-st.header("Search YouTube Channel")
-yt_handle = st.text_input("YouTube Channel Handle")
-last_x_days = st.number_input("Last X Days", min_value=1, max_value=30, value=7)
-if st.button("Search YouTube"):
-    if yt_handle:
-        videos = search_youtube(yt_handle, last_x_days)
-        for v in videos:
-            st.write(f"{v['title']} ({v['published']})")
-    else:
-        st.error("Please enter a YouTube channel handle.")
+# st.header("Search YouTube Channel")
+# yt_handle = st.text_input("YouTube Channel Handle")
+# last_x_days = st.number_input("Last X Days", min_value=1, max_value=30, value=7)
+# if st.button("Search YouTube"):
+#     if yt_handle:
+#         videos = search_youtube(yt_handle, last_x_days)
+#         for v in videos:
+#             st.write(f"{v['title']} ({v['published']})")
+#     else:
+#         st.error("Please enter a YouTube channel handle.")
 
 st.header("Read Google Sheet")
 spreadsheet_id = st.text_input("Spreadsheet ID")
