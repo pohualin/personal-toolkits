@@ -3,6 +3,9 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.auth.exceptions import RefreshError
+from src.config.logging_config import setup_logging
+
+log = setup_logging()
 
 GMAIL_SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 GSHEET_SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -10,6 +13,9 @@ YOUTUBE_SCOPES = ["https://www.googleapis.com/auth/youtube.readonly"]
 
 def refresh_creds_if_needed(creds, token_path, scopes, creds_path):
     try:
+        log.info(f"Credentials: {creds}")
+        log.info(f"Credentials expired: {creds.expired}")
+        log.info(f"Credentials refresh token: {creds.refresh_token}")
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
             with open(token_path, 'w') as token:
